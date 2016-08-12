@@ -6,7 +6,7 @@ class Table(object):
         self.name = name
         self.columns = cols
 
-    def addColumn(self,col):
+    def add_column(self,col):
         self.columns.append(col)
 
 class Column(object):
@@ -19,12 +19,12 @@ class Column(object):
 
 class ForeignKeyColumn(Column):
     def __init__(self,name,table,other_column):
-        super(ForeignKeyColumn,self).__init__(name,table)
+        super().__init__(name,table)
         self.foreign_column = other_column
 
 
 class PrimaryKeyColumn(Column):
     def __init__self(self,name,table):
-        super(PrimaryKeyColumn,self).__init__(name,table)
+        super().__init__(name,table)
 
 
