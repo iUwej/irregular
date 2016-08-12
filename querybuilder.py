@@ -1,5 +1,7 @@
 from collections import namedtuple
 
+
+
 #Structure to carry our Inequalities for filter purposes
 Ineq = namedtuple('Ineq',['col','op','value'])
 
