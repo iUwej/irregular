@@ -1,5 +1,5 @@
 from collections import namedtuple
-
+from abc import ABC, abstractmethod
 
 
 #Structure to carry our Inequalities for filter purposes
@@ -21,27 +21,45 @@ of the value in the set
 """
 In = namedtuple('In',['col','values'])
 
+"""
+Base class for all Filter clauses, provide a helper method to flatten it to an SQL statement.
+Allows for a recursive definition of filter clauses
+"""
+class BaseFilter(ABC):
+    @abstractmethod
+    def unravel(self):
+        pass
+    
 
 """
 Class that represents a simple SQL where clause, basic filter class
 """
-class Where(object):
-    def __init__(self,exp):
-        self.expression = exp 
-"""
-A Class that holds a list of inequalities. Filter clause for records
-matching all conditions
-"""
-class WhereAnd(object):
-    def __init__(self,explist = []):
-        self.expressions = explist
+class SimpleFilter(BaseFilter):
+
+    def __init__(self,ineq):
+        self.expression = ineq
+
+    def unravel(self):
+        pass
 
 """
-A class that holds a list of inequalities. Represents a filter clause
-for records that match any of the conditions
+class that represents a where filter with several inequalities joined by an  "and" clause
 """
-class WhereOr(object):
-    def __init__(self,explist = []):
-        self.expressions = explist
+class AndFilter(BaseFilter):
+    def __init__(self,filters):
+        self.filters = filters
+
+    def unravel(self):
+        pass
 
 
+"""
+class that represents a filter with several inequalities joined by an "or" clause
+"""
+
+class OrFilter(BaseFilter):
+    def __init__(self,filters):
+        self.filters = filters
+
+    def unravel(self):
+        pass
