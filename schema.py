@@ -1,6 +1,9 @@
 from sqlalchemy import *
 from collections import namedtuple
 
+"""
+class that correspond to a SQL table
+"""
 class Table(object):
     def __init__(self,name,cols=[]):
         self.name = name
@@ -9,22 +12,32 @@ class Table(object):
     def add_column(self,col):
         self.columns.append(col)
 
+"""
+class that represents a generic SQL column
+"""
 class Column(object):
-    def __init__(self,name,table):
+    def __init__(self,name,table,dtype):
         self.name = name
-        #i thought this might be necessary
+        #i thought this might be nessary
         # but then again each table has a list of columns
         self.table = table
-        
+        self.data_type = dtype        
 
+"""
+class that represents a foreign key relation in a table
+"""
 class ForeignKeyColumn(Column):
-    def __init__(self,name,table,other_column):
-        super().__init__(name,table)
+    def __init__(self,name,table,dtype,other_column):
+        super().__init__(name,table,dtype)
         self.foreign_column = other_column
 
 
 class PrimaryKeyColumn(Column):
-    def __init__self(self,name,table):
-        super().__init__(name,table)
+    def __init__(self,name,table,dtype):
+        super().__init__(name,table,dtype)
 
 
+class AggregateColumn(Column):
+    def __init__(self,name,table,dtype,func):
+        super().__init__(name,table,dtype)
+        self.func = func
