@@ -1,4 +1,4 @@
-from sqlalchemy import *
+
 from collections import namedtuple
 
 """
@@ -31,12 +31,17 @@ class ForeignKeyColumn(Column):
         super().__init__(name,table,dtype)
         self.foreign_column = other_column
 
-
+"""
+a class that represents a primary key column in  a table
+"""
 class PrimaryKeyColumn(Column):
     def __init__(self,name,table,dtype):
         super().__init__(name,table,dtype)
 
-
+"""
+ a class representing a column that will be aggregated in the 
+query
+"""
 class AggregateColumn(Column):
     def __init__(self,name,table,dtype,func):
         super().__init__(name,table,dtype)
