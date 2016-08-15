@@ -3,23 +3,39 @@ from abc import ABC, abstractmethod
 
 
 #Structure to carry our Inequalities for filter purposes
-Ineq = namedtuple('Ineq',['col','op','value'])
+"""
+class that represents an SQL query filter relation such as "id = 23"
+"""
+class Relation(object):
+    def __init__(self,col,op,value):
+        self.col = col
+        self.op = op
+        self.value = value 
+
+
 
 """
 Represent a range clause. e.g.where col_name between value1 and value2"
 """
-Range = namedtuple('Range',['col','inital_value','final_value'])
+class Range(object):
+    def __init__(self,col,min_value,max_value):
+        self.col = col
+        self.min_value = min_value
+        self.max_value = max_value
+
 
 """
 Represent a join between two tables on t1.col1 t2.col2"
 """
-Join = namedtuple('Join',['table1','table2','col1','col2'])
+class Join(object):
+    def __init__(self,table,ref_table,col,ref_col):
+        self.table = table
+        self.ref_table = ref_table
+        self.col = col
+        self.ref_col = ref_col
 
-"""
-Represents an in clause in SQL for a col that matches any
-of the value in the set
-"""
-In = namedtuple('In',['col','values'])
+
+
 
 """
 Base class for all Filter clauses, provide a helper method to flatten it to an SQL statement.
