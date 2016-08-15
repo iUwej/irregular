@@ -1,6 +1,18 @@
 from collections import namedtuple
 from abc import ABC, abstractmethod
+from enum import Enum
 
+class Ops(Enum):
+    eq = "="
+    isnot = "is not"
+    neg = "!="
+    lt = "<"
+    gt = ">"
+    atmost = "<="
+    atleast = ">="
+    member = "in"
+    
+    
 
 #Structure to carry our Inequalities for filter purposes
 """
@@ -76,6 +88,16 @@ class that represents a filter with several inequalities joined by an "or" claus
 class OrFilter(BaseFilter):
     def __init__(self,filters):
         self.filters = filters
+
+    def unravel(self):
+        pass
+
+"""
+Filter for aggregated columns
+"""
+class HavingFilter(BaseFilter):
+    def __init__(self,ineq):
+        self.ineq = ineq
 
     def unravel(self):
         pass
