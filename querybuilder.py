@@ -2,6 +2,32 @@ from collections import namedtuple
 from abc import ABC, abstractmethod
 from enum import Enum
 
+
+
+"""
+corresponds to sql aggregate functions
+"""
+class AggFunctions(Enum):
+    avg = "avg"
+    count = "count"
+    first = "first"
+    last = "last"
+    smax = "max"
+    smin = "min"
+    ssum = "sum"
+
+"""
+enum values that corresponds to sql scala functions
+"""
+class ScalaFunctions(Enum):
+    ucase = "ucase"
+    lcase = "lcase"
+    mid = "mid"
+    s_len = "len"
+    s_round = "round"
+    s_now = "now"
+    s_format = "format"
+
 class Ops(Enum):
     eq = "="
     isnot = "is not"
@@ -100,4 +126,14 @@ class HavingFilter(BaseFilter):
         self.ineq = ineq
 
     def unravel(self):
+        pass
+
+
+"""
+Base class for query builders"
+"""
+class AbstractQuery(ABC):
+    
+    @abstractmethod
+    def to_sql(self):
         pass
