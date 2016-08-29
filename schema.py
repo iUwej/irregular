@@ -47,7 +47,9 @@ class Column(object):
         # but then again each table has a list of columns
         self.table = table
         self.data_type = dtype        
-
+        
+        def to_sql(self):
+            return self.name
 """
 class that represents a foreign key relation in a table
 """
@@ -71,3 +73,6 @@ class AggregateColumn(Column):
     def __init__(self,name,table,dtype,func):
         super().__init__(name,table,dtype)
         self.func = func
+
+    def to_sql(self):
+        return "%s(%s)" % (self.func,self.name)

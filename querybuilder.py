@@ -40,6 +40,7 @@ class Ops(Enum):
     
     
 
+
 #Structure to carry our Inequalities for filter purposes
 """
 class that represents an SQL query filter relation such as "id = 23"
@@ -50,8 +51,11 @@ class Relation(object):
         self.op = op
         self.value = value 
 
+    def to_sql(self):
+        return "%s %s %s" % (self.col.to_sql(),self.op,self.value) 
+        
 
-
+n
 """
 Represent a range clause. e.g.where col_name between value1 and value2"
 """
@@ -60,6 +64,9 @@ class Range(object):
         self.col = col
         self.min_value = min_value
         self.max_value = max_value
+
+    def to_sql(self):
+        return "%s between %s and %s" % (self.col.to_sql(),self.min_value,self.max_value)
 
 
 """
@@ -72,6 +79,9 @@ class Join(object):
         self.col = col
         self.ref_col = ref_col
 
+    def to_sql(self):
+        return "join %s on %s.%s = %s.%s" % (self.ref_table,self.ref_col,table.name,self.col.name)
+        
 
 
 
@@ -94,7 +104,8 @@ class SimpleFilter(BaseFilter):
         self.expression = ineq
 
     def unravel(self):
-        pass
+        #find out the instance of the inequality
+        
 
 """
 class that represents a where filter with several inequalities joined by an  "and" clause
@@ -104,7 +115,11 @@ class AndFilter(BaseFilter):
         self.filters = filters
 
     def unravel(self):
-        pass
+        output = [filter.unravel() for filter in self.filters]
+        return 'and'.join(output)
+            
+            
+        
 
 
 """
@@ -116,7 +131,8 @@ class OrFilter(BaseFilter):
         self.filters = filters
 
     def unravel(self):
-        pass
+        output = [filter.unravel() for filter in self.filters]
+        return 'or'.join(output)
 
 """
 Filter for aggregated columns
@@ -133,7 +149,42 @@ class HavingFilter(BaseFilter):
 Base class for query builders"
 """
 class AbstractQuery(ABC):
-    
     @abstractmethod
     def to_sql(self):
         pass
+
+"""
+Simple SQl query, all columns are drawn from the same table"
+"""
+class SimpleQuery(AbstractQuery):
+    def __init__(self,table,cols = None,filters= None,group_by= None,order_by = None):
+        self.table = table
+        #if no cols are specified we shall assume all columns are required
+        self.cols = cols if cols else []
+        
+        self.filters = filters if filters else []
+        self.group_by = group_by if group_by else []
+        self.order_by = group_by if group_by else []
+
+        def to_sql(self):
+            #will have to move this logic into a more generic class
+            output = []
+            output.append('select')
+            #append cols sql code
+            cols_count = len(self.cols)
+            for i ,col in enumerate(self.cols):
+                output.append(col.to_sql())
+                if not cols_count == i + 1:
+                    output.append(',')
+            #unravel the filters and append to the output
+            #i believe there's a more optimal solution if i dare scrath the surface
+            
+            #first flatten or filters into a single 'And' filter
+            if self.filters:
+                all_filters = AndFilter(self.filters)
+                output.append('where')
+                output.append(all_filters.unravel())
+
+            #add the group_by sql
+            
+            
