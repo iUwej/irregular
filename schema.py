@@ -5,6 +5,7 @@ from enum import Enum
 """
 corresponds to sql aggregate functions
 """
+#this was just  a test.
 class AggFunctions(Enum):
     avg = "avg"
     count = "count"
